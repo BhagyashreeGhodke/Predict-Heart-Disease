@@ -81,27 +81,31 @@ def index():
 def predict():
     """Handles the form submission, processes the data, and returns the prediction."""
     try:
-        # --- EVEN MORE ROBUST DATA PREPARATION ---
-
+        # --- FINAL ROBUST DATA PREPARATION ---
+        
         # 1. Get the data submitted by the user.
         user_input = request.form.to_dict()
+        input_data = {}
 
-        # 2. Create a DataFrame with one row of default values, ensuring all columns are present in the correct order.
-        input_df = pd.DataFrame([ALL_DEFAULTS], columns=INPUT_COLS)
+        # 2. Iterate through the canonical list of columns the model expects.
+        for col in INPUT_COLS:
+            value = user_input.get(col)
 
-        # 3. Iterate through the user's submitted data and update the DataFrame.
-        for col, value in user_input.items():
-            # Only process columns that are expected by the model.
-            if col in INPUT_COLS:
-                # Check if the submitted value is valid (not None or just whitespace).
-                if value and value.strip():
-                    try:
-                        # Update the specific cell in the DataFrame.
-                        input_df.loc[0, col] = float(value)
-                    except (ValueError, TypeError):
-                        # If conversion to float fails, the default value from the initial DataFrame remains.
-                        print(f"Warning: Invalid value '{value}' for column '{col}'. Using default.")
-                        pass # The default is already in place, so no action is needed.
+            # 3. Check if the user provided a valid, non-empty value.
+            if value and value.strip():
+                try:
+                    # If valid, convert to float and use it.
+                    input_data[col] = float(value)
+                except (ValueError, TypeError):
+                    # If conversion fails, fall back to the default for that column.
+                    print(f"Warning: Invalid value '{value}' for '{col}'. Using default.")
+                    input_data[col] = ALL_DEFAULTS[col]
+            else:
+                # If the user did not provide a value (or it's empty), use the default.
+                input_data[col] = ALL_DEFAULTS[col]
+
+        # 4. Create the DataFrame, ensuring the column order is correct.
+        input_df = pd.DataFrame([input_data])[INPUT_COLS]
         
         print("--- Input Data for Model ---")
         print(input_df.to_string())
