@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Define model download URLs
 MODEL_URLS = {
     "logistic_regression_model.pkl": "https://drive.google.com/uc?id=1yZLf84PhhNhCa1Y6TfRf0io8RN9t__LE",
-    "random_forest_model.pkl": "https://drive.google.com/uc?id=12n2UT3zTFysga-ZVM5n3-sRJAN2r-lvl",
+    # "random_forest_model.pkl": "https://drive.google.com/uc?id=12n2UT3zTFysga-ZVM5n3-sRJAN2r-lvl", # Removed
     "gradient_boosting_model.pkl": "https://drive.google.com/uc?id=1zGm5yaT_gykP2aqBw6KybB1l78MtvUsb",
 }
 
@@ -37,9 +37,10 @@ try:
         lr_model = pickle.load(f)
     print("Logistic Regression model loaded.")
 
-    with open(os.path.join(MODEL_PATH, "random_forest_model.pkl"), "rb") as f:
-        rf_model = pickle.load(f)
-    print("Random Forest model loaded.")
+    # with open(os.path.join(MODEL_PATH, "random_forest_model.pkl"), "rb") as f: # Removed
+    #     rf_model = pickle.load(f) # Removed
+    # print("Random Forest model loaded.") # Removed
+    rf_model = None # Set to None as it's no longer loaded
 
     with open(os.path.join(MODEL_PATH, "gradient_boosting_model.pkl"), "rb") as f:
         gb_model = pickle.load(f)
@@ -95,15 +96,15 @@ def predict():
 
         if model_choice == "Logistic Regression":
             model_to_use = lr_model
-        elif model_choice == "Random Forest":
-            model_to_use = rf_model
+        # elif model_choice == "Random Forest": # Removed
+        #     model_to_use = rf_model # Removed
         elif model_choice == "Gradient Boosting":
             model_to_use = gb_model
         else:
-            # Handle invalid model choice
+            # Handle invalid model choice (including if Random Forest was still selected from an old form)
             return render_template("result.html",
                                    prediction_text="Error: Invalid model selected.",
-                                   interpretation_message="Please go back and select a valid prediction model.",
+                                   interpretation_message="Please go back and select a valid prediction model (Logistic Regression or Gradient Boosting).",
                                    confidence_score=None)
 
         if model_to_use is None:
@@ -160,4 +161,3 @@ def dashboard():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
