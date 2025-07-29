@@ -1,11 +1,22 @@
-# Predict-Heart-Disease-Using-BRFSS-Data
+# Predict-Heart-Disease
 
 Title:
-Predictive Modeling and Risk Factor Analysis for Heart Disease Using BRFSS Data
+HeartSmart AI: Decoding Lifestyle's Role in Cardiovascular Risk Through Machine Learning
 
 Abstract:
-Heart disease remains a leading cause of mortality worldwide, underscoring the need for early detection and preventive healthcare. This project leverages data from the Behavioral Risk Factor Surveillance System (BRFSS) for the years 2013–2015, encompassing health, demographic, and lifestyle information for approximately 300,000 individuals. The binary target variable, HeartDiseaseorAttack (0 = No, 1 = Yes), presents a significant class imbalance, with only a small proportion of positive cases, posing challenges for accurate prediction.
 
-To address this, the dataset was meticulously preprocessed through cleaning, encoding, scaling, and applying class imbalance mitigation techniques. Machine learning models including Logistic Regression, Random Forest, and Gradient Boosting were developed to predict heart disease risk. Model performance was evaluated using Recall, F1-score, and ROC-AUC, prioritizing the accurate identification of at-risk individuals.
+Heart disease is one of the top causes of death worldwide, making early detection and prevention essential.
 
-Beyond predictive modeling, the project also aimed to uncover key risk factors—such as age, BMI, blood pressure, cholesterol levels, and physical activity—that contribute to heart disease. To enhance interpretability and facilitate decision-making, interactive Tableau dashboards were created to visualize trends, demographic distributions, and the influence of lifestyle factors. These insights support more informed public health strategies and personalized preventive care
+This project studies how lifestyle choices affect heart health by analyzing the relationship between personal habits and heart disease risk. The analysis covers key factors like smoking, exercise, diet, and mental health.
+
+We used a large dataset of 300,000 records that includes demographic, behavioral, and medical information. A scalable data pipeline was built using PySpark on Hadoop for fast processing, SQL for structured data storage, and Python for building predictive models. The pipeline includes automated feature engineering and techniques to handle class imbalance.
+
+To understand what drives risk, we used SHAP analysis, which highlighted factors such as lack of physical activity and high blood pressure.
+
+The system offers:
+
+A Flask-based web app for personalized heart disease risk assessment.
+
+Interactive Tableau dashboards for monitoring population-level heart health.
+
+By combining data science with healthcare, this project supports personalized prevention for individuals and helps policymakers target high-risk groups with effective public health strategies.
