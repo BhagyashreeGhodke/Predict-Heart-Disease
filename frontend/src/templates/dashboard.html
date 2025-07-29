@@ -4,23 +4,85 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Heart Disease Dashboard</title>
+    <title>Heart Disease Insights Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Basic styles for responsive iframe, you should move this to style.css */
+        .iframe-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+            height: 0;
+            overflow: hidden;
+            margin-top: 20px;
+            /* Add some space above the iframe */
+            background-color: #f8f9fa;
+            /* Light background while loading */
+            border-radius: 8px;
+            /* Slightly rounded corners */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            /* Subtle shadow */
+        }
+
+        .iframe-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            /* Remove default iframe border */
+        }
+
+        .loading-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #6c757d;
+            /* Muted text color */
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        /* Adjustments for the main container */
+        .dashboard-container {
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container dashboard-container">
-        <a href="/" class="btn btn-primary mb-3">← Back to Prediction</a>
-        <h3 class="text-center text-primary mb-4">Heart Disease Insights Dashboard</h3>
-        <iframe src="https://public.tableau.com/app/profile/chris.gerrard/viz/RegionalSampleWorkbook/Storms"
-            allowfullscreen></iframe>
-        <p class="text-center mt-3">
-            <a href="https://public.tableau.com/app/profile/chris.gerrard/viz/RegionalSampleWorkbook/Storms"
-                target="_blank">Open Dashboard in
-                New Tab</a>
-        </p>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="/" class="btn btn-outline-primary">← Back to Prediction</a>
+            <h3 class="text-center text-primary mb-0 flex-grow-1">Heart Disease Insights Dashboard</h3>
+            <div></div>
+        </div>
+
+
+        <div class="dashboard-content">
+            <div class="iframe-wrapper">
+                <p class="loading-message">Loading Dashboard...</p>
+                <iframe
+                    src="https://public.tableau.com/views/Superstore_embedded_800x800/Overview?:embed=y&:display_count=no&:showVizHome=no"
+                    title="Sample Tableau Dashboard" allowfullscreen
+                    onload="this.previousElementSibling.style.display='none';"></iframe>
+            </div>
+
+            <p class="text-center mt-4">
+                <a href="https://public.tableau.com/app/profile/chris.gerrard/viz/RegionalSampleWorkbook/Storms"
+                    target="_blank" rel="noopener noreferrer" class="btn btn-info btn-sm">
+                    Open Full Dashboard in New Tab <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+            </p>
+
+        </div>
     </div>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 </body>
 
 </html>
