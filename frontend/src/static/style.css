@@ -4,20 +4,25 @@ body {
     /* Prefer Segoe UI, then fallbacks */
     background: linear-gradient(135deg, #f0f2f5 0%, #e0e0e0 100%);
     /* Light subtle gradient background for the whole page */
-    display: flex;
-    /* For vertical/horizontal centering on result page */
-    justify-content: center;
-    /* For horizontal centering on result page */
-    align-items: center;
-    /* For vertical centering on result page */
-    min-height: 100vh;
-    /* Ensure body takes full viewport height for centering */
     margin: 0;
     color: #333;
     /* Default text color */
     overflow-x: hidden;
     /* Prevent horizontal scroll */
 }
+
+/* This new class should be added to the <body> tag of pages that need centered content, like the result page. */
+body.centered-page {
+    display: flex;
+    /* For vertical/horizontal centering */
+    justify-content: center;
+    /* For horizontal centering */
+    align-items: center;
+    /* For vertical centering */
+    min-height: 100vh;
+    /* Ensure body takes full viewport height for centering */
+}
+
 
 h1,
 h2,
@@ -275,15 +280,6 @@ button:hover,
 .dashboard-container {
     padding-top: 20px;
     padding-bottom: 40px;
-    /* Overrides the body flex properties for the dashboard page */
-    display: block;
-    /* Important: reset display for non-centered layouts */
-    align-items: flex-start;
-    /* Reset alignment */
-    justify-content: flex-start;
-    /* Reset justification */
-    min-height: auto;
-    /* Reset min-height as content is long */
 }
 
 .iframe-wrapper {
