@@ -150,7 +150,7 @@
                 {{ prediction_text }}
             </div>
 
-            {% if confidence_score is defined %}
+            {% if confidence_score is defined and confidence_score is not none %}
             <div class="confidence-score">
                 Confidence: {{ "%.2f"|format(confidence_score * 100) }}%
             </div>

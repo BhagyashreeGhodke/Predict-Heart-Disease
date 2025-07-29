@@ -3,55 +3,55 @@ import pickle
 import gdown
 import pandas as pd
 from flask import Flask, render_template, request
+import numpy as np
+import traceback
 
+# Initialize the Flask application
 app = Flask(__name__)
 
-# Define model download URLs
+# --- Model Downloading and Loading ---
+
+# Define Google Drive URLs for the pre-trained models
 MODEL_URLS = {
     "logistic_regression_model.pkl": "https://drive.google.com/uc?id=1yZLf84PhhNhCa1Y6TfRf0io8RN9t__LE",
-    # "random_forest_model.pkl": "https://drive.google.com/uc?id=12n2UT3zTFysga-ZVM5n3-sRJAN2r-lvl", # Removed
     "gradient_boosting_model.pkl": "https://drive.google.com/uc?id=1zGm5yaT_gykP2aqBw6KybB1l78MtvUsb",
 }
 
-# Set up model storage path
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "models")
+# Set up a local path to store the models
+MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
 os.makedirs(MODEL_PATH, exist_ok=True)
 
-# Download models if missing
+# Download the models from Google Drive if they don't exist locally
 for model_name, url in MODEL_URLS.items():
     file_path = os.path.join(MODEL_PATH, model_name)
     if not os.path.exists(file_path):
         print(f"Downloading {model_name}...")
         try:
             gdown.download(url, file_path, quiet=False)
-            print(f"Saved {model_name} to {file_path}")
+            print(f"Successfully saved {model_name} to {file_path}")
         except Exception as e:
             print(f"Error downloading {model_name}: {e}")
-            # You might want to exit or raise an error here if a model is critical
     else:
-        print(f"{model_name} already exists.")
+        print(f"{model_name} already exists locally.")
 
-# Load models
+# Load the downloaded models into memory
 try:
     with open(os.path.join(MODEL_PATH, "logistic_regression_model.pkl"), "rb") as f:
         lr_model = pickle.load(f)
-    print("Logistic Regression model loaded.")
-
-    # with open(os.path.join(MODEL_PATH, "random_forest_model.pkl"), "rb") as f: # Removed
-    #     rf_model = pickle.load(f) # Removed
-    # print("Random Forest model loaded.") # Removed
-    rf_model = None # Set to None as it's no longer loaded
+    print("Logistic Regression model loaded successfully.")
 
     with open(os.path.join(MODEL_PATH, "gradient_boosting_model.pkl"), "rb") as f:
         gb_model = pickle.load(f)
-    print("Gradient Boosting model loaded.")
-
+    print("Gradient Boosting model loaded successfully.")
+    
 except FileNotFoundError as e:
-    print(f"Error loading model file: {e}. Please ensure models are downloaded correctly.")
-    lr_model, rf_model, gb_model = None, None, None # Set models to None if loading fails
-    # In a production app, you might want to gracefully handle this, e.g., by showing a maintenance page
+    print(f"FATAL: Could not load a model file: {e}. The application cannot make predictions.")
+    lr_model, gb_model = None, None
 
-# Input columns (excluding the target: HeartDiseaseorAttack)
+# --- Data Configuration ---
+
+# This list defines the exact column order that the models were trained on.
+# This order is critical for the model to work correctly.
 INPUT_COLS = [
     'HighBP', 'HighChol', 'CholCheck', 'BMI', 'Smoker', 'Stroke', 'Diabetes',
     'PhysActivity', 'Fruits', 'Veggies', 'HvyAlcoholConsump', 'AnyHealthcare',
@@ -59,87 +59,88 @@ INPUT_COLS = [
     'Education', 'Income'
 ]
 
-# Default values for any missing or incorrect user input
-default_values = {
-    'Diabetes': 0, 'HighBP': 0, 'HighChol': 0, 'CholCheck': 1, 'BMI': 25.0,
-    'Smoker': 0, 'Stroke': 0, 'PhysActivity': 1, 'Fruits': 1, 'Veggies': 1,
-    'HvyAlcoholConsump': 0, 'AnyHealthcare': 1, 'NoDocbcCost': 0, 'GenHlth': 3,
-    'MentHlth': 0, 'PhysHlth': 0, 'DiffWalk': 0, 'Sex': 1, 'Age': 8,
-    'Education': 4, 'Income': 6
+# This dictionary provides a complete set of default values for all expected inputs.
+# This makes the data preparation robust against missing or empty form fields.
+ALL_DEFAULTS = {
+    'HighBP': 0.0, 'HighChol': 0.0, 'CholCheck': 1.0, 'BMI': 25.0, 
+    'Smoker': 0.0, 'Stroke': 0.0, 'Diabetes': 0.0, 'PhysActivity': 1.0, 
+    'Fruits': 1.0, 'Veggies': 1.0, 'HvyAlcoholConsump': 0.0, 
+    'AnyHealthcare': 1.0, 'NoDocbcCost': 0.0, 'GenHlth': 3.0, 
+    'MentHlth': 0.0, 'PhysHlth': 0.0, 'DiffWalk': 0.0, 'Sex': 1.0, 
+    'Age': 8.0, 'Education': 4.0, 'Income': 6.0
 }
+
+# --- Flask Routes ---
 
 @app.route("/")
 def index():
+    """Renders the main page with the prediction form."""
     return render_template("index.html")
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    """Handles the form submission, processes the data, and returns the prediction."""
     try:
+        # --- EVEN MORE ROBUST DATA PREPARATION ---
+
+        # 1. Get the data submitted by the user.
         user_input = request.form.to_dict()
-        input_data = {}
 
-        for col in INPUT_COLS:
-            raw_value = user_input.get(col, "").strip()
-            try:
-                # Convert to float; if empty or invalid, use default
-                value = float(raw_value) if raw_value else default_values[col]
-            except (ValueError, TypeError):
-                value = default_values[col] # Fallback if conversion fails
-            input_data[col] = value
+        # 2. Create a DataFrame with one row of default values, ensuring all columns are present in the correct order.
+        input_df = pd.DataFrame([ALL_DEFAULTS], columns=INPUT_COLS)
 
-        # Create DataFrame for prediction
-        input_df = pd.DataFrame([input_data])
+        # 3. Iterate through the user's submitted data and update the DataFrame.
+        for col, value in user_input.items():
+            # Only process columns that are expected by the model.
+            if col in INPUT_COLS:
+                # Check if the submitted value is valid (not None or just whitespace).
+                if value and value.strip():
+                    try:
+                        # Update the specific cell in the DataFrame.
+                        input_df.loc[0, col] = float(value)
+                    except (ValueError, TypeError):
+                        # If conversion to float fails, the default value from the initial DataFrame remains.
+                        print(f"Warning: Invalid value '{value}' for column '{col}'. Using default.")
+                        pass # The default is already in place, so no action is needed.
+        
+        print("--- Input Data for Model ---")
+        print(input_df.to_string())
+        print("----------------------------")
 
+        # --- Model Selection and Prediction ---
         model_choice = user_input.get("model", "Logistic Regression")
         model_to_use = None
-        # model_name variable is no longer needed for the interpretation message
 
-        if model_choice == "Logistic Regression":
+        if model_choice == "Logistic Regression" and lr_model:
             model_to_use = lr_model
-        # elif model_choice == "Random Forest": # Removed
-        #     model_to_use = rf_model # Removed
-        elif model_choice == "Gradient Boosting":
+        elif model_choice == "Gradient Boosting" and gb_model:
             model_to_use = gb_model
-        else:
-            # Handle invalid model choice (including if Random Forest was still selected from an old form)
+        
+        if not model_to_use:
             return render_template("result.html",
-                                   prediction_text="Error: Invalid model selected.",
-                                   interpretation_message="Please go back and select a valid prediction model (Logistic Regression or Gradient Boosting).",
+                                   prediction_text="Prediction Error",
+                                   interpretation_message="The selected model is not available. It might have failed to load on startup.",
                                    confidence_score=None)
 
-        if model_to_use is None:
-            # Handle case where model failed to load at startup
-            return render_template("result.html",
-                                   prediction_text="Error: Prediction model not available.",
-                                   interpretation_message="The selected model could not be loaded. Please try again later or contact support.",
-                                   confidence_score=None)
-
-        # Perform prediction
         prediction = model_to_use.predict(input_df)[0]
-        # Get probabilities for both classes [prob_class_0, prob_class_1]
         probabilities = model_to_use.predict_proba(input_df)[0]
 
-        prediction_text = ""
-        interpretation_message = ""
-        confidence_score = None
-
+        # --- Prepare Results for Display ---
         if prediction == 1:
             prediction_text = "Heart Disease Detected"
-            # Confidence in having heart disease (class 1)
             confidence_score = probabilities[1]
             interpretation_message = (
                 "Based on the provided data, there is an indication of potential heart disease. "
                 "It is crucial to consult a healthcare professional for a comprehensive diagnosis and personalized advice. "
-                "This prediction is for informational purposes only and should not replace professional medical consultation."
+                "This prediction is for informational purposes only."
             )
         else:
             prediction_text = "No Heart Disease Indicated"
-            # Confidence in NOT having heart disease (class 0)
             confidence_score = probabilities[0]
             interpretation_message = (
                 "The prediction suggests a lower risk of heart disease based on your inputs. "
-                "However, regular check-ups, maintaining a healthy lifestyle, and addressing any concerns with a healthcare professional are always recommended. "
-                "This prediction is for informational purposes only and should not replace professional medical consultation."
+                "However, regular check-ups and maintaining a healthy lifestyle are always recommended. "
+                "This prediction is for informational purposes only."
             )
 
         return render_template("result.html",
@@ -148,18 +149,19 @@ def predict():
                                interpretation_message=interpretation_message)
 
     except Exception as e:
-        # Catch any unexpected errors during the prediction process
-        print(f"An error occurred during prediction: {e}")
+        # Catch any other unexpected errors and display a helpful message.
+        print("--- AN UNEXPECTED ERROR OCCURRED ---")
+        print(traceback.format_exc())
+        print("------------------------------------")
         return render_template("result.html",
                                prediction_text="Prediction Error",
-                               interpretation_message=f"An unexpected error occurred. Please try again.",
+                               interpretation_message="An unexpected server error occurred. Please try again later.",
                                confidence_score=None)
 
 @app.route("/dashboard")
 def dashboard():
+    """Renders the dashboard page."""
     return render_template("dashboard.html")
-
-import os
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
