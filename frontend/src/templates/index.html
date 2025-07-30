@@ -3,155 +3,31 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Heart Disease Predictor</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Custom styles with a new color palette */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f9fc;
-            /* Lighter, cleaner background */
-            color: #4a5568;
-            /* Softer default text color */
-        }
-
-        .card {
-            border: none;
-            border-radius: 1rem;
-            background-color: #ffffff;
-            box-shadow: 0 8px 24px rgba(29, 53, 87, 0.1);
-            /* Softer, more pronounced shadow */
-        }
-
-        .main-title {
-            color: #0077b6;
-            /* A strong, trustworthy blue for the main title */
-            font-weight: 700;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #2d3748;
-            /* Dark grey for readable labels */
-        }
-
-        .form-select,
-        .form-control {
-            border-color: #e2e8f0;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .form-select:focus,
-        .form-control:focus {
-            border-color: #0077b6;
-            /* Accent color on focus */
-            box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.2);
-            /* Soft glow on focus */
-            outline: none;
-        }
-
-        .btn-primary {
-            background-color: #0077b6;
-            /* A strong, trustworthy blue */
-            border-color: #0077b6;
-            border-radius: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #023e8a;
-            /* A deeper blue for hover state */
-            border-color: #023e8a;
-            transform: translateY(-2px);
-        }
-
-        /* Tooltip container */
-        .tooltip-container {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-        }
-
-        /* The help icon (?) */
-        .help-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background-color: #ced4da;
-            /* Neutral grey */
-            color: white;
-            font-weight: bold;
-            font-size: 12px;
-            margin-left: 8px;
-            transition: background-color 0.3s;
-        }
-
-        .tooltip-container:hover .help-icon {
-            background-color: #0077b6;
-            /* Matches primary button color */
-        }
-
-        /* The tooltip text */
-        .tooltip-text {
-            visibility: hidden;
-            width: 220px;
-            background-color: #2d3748;
-            /* Dark grey tooltip background */
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -110px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        /* Arrow for the tooltip */
-        .tooltip-text::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #2d3748 transparent transparent transparent;
-        }
-
-        .tooltip-container:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 
-<body>
+<body class="index-page">
     <div class="container mt-5 mb-5">
         <div class="card p-4 p-md-5">
             <h2 class="text-center main-title mb-5">Heart Disease Risk Prediction</h2>
-            <form action="/predict" method="POST">
+
+            <form action="/predict" method="POST" novalidate>
                 <div class="row g-4">
 
                     <!-- High Blood Pressure -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">Do you have high blood pressure?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="HighBP">Do you have high blood
+                            pressure?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Select 1 for Yes, 0 for No.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="HighBP">
+                        <select class="form-select" name="HighBP" id="HighBP" required>
                             <option value="" disabled selected>Select</option>
                             <option value="0">0 (No)</option>
                             <option value="1">1 (Yes)</option>
@@ -160,13 +36,13 @@
 
                     <!-- High Cholesterol -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">Do you have high cholesterol?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="HighChol">Do you have high cholesterol?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Select 1 for Yes, 0 for No.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="HighChol">
+                        <select class="form-select" name="HighChol" id="HighChol" required>
                             <option value="" disabled selected>Select</option>
                             <option value="0">0 (No)</option>
                             <option value="1">1 (Yes)</option>
@@ -175,14 +51,14 @@
 
                     <!-- Smoker -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">Are you a smoker?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="Smoker">Are you a smoker?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Have you smoked at least 100 cigarettes in your life? Select 1
                                     for Yes, 0 for No.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="Smoker">
+                        <select class="form-select" name="Smoker" id="Smoker" required>
                             <option value="" disabled selected>Select</option>
                             <option value="0">0 (No)</option>
                             <option value="1">1 (Yes)</option>
@@ -191,13 +67,13 @@
 
                     <!-- Stroke -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">Have you ever had a stroke?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="Stroke">Have you ever had a stroke?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Select 1 for Yes, 0 for No.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="Stroke">
+                        <select class="form-select" name="Stroke" id="Stroke" required>
                             <option value="" disabled selected>Select</option>
                             <option value="0">0 (No)</option>
                             <option value="1">1 (Yes)</option>
@@ -206,14 +82,15 @@
 
                     <!-- Physical Activity -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">Do you engage in physical activity?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="PhysActivity">Do you engage in physical
+                            activity?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Engaged in physical activity in the past 30 days (not
                                     including job)? Select 1 for Yes, 0 for No.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="PhysActivity">
+                        <select class="form-select" name="PhysActivity" id="PhysActivity" required>
                             <option value="" disabled selected>Select</option>
                             <option value="0">0 (No)</option>
                             <option value="1">1 (Yes)</option>
@@ -222,14 +99,14 @@
 
                     <!-- Fruits -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">Do you consume fruits daily?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="Fruits">Do you consume fruits daily?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Do you consume fruit 1 or more times per day? Select 1 for
                                     Yes, 0 for No.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="Fruits">
+                        <select class="form-select" name="Fruits" id="Fruits" required>
                             <option value="" disabled selected>Select</option>
                             <option value="0">0 (No)</option>
                             <option value="1">1 (Yes)</option>
@@ -238,14 +115,15 @@
 
                     <!-- Veggies -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">Do you consume vegetables daily?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="Veggies">Do you consume vegetables
+                            daily?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Do you consume vegetables 1 or more times per day? Select 1
                                     for Yes, 0 for No.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="Veggies">
+                        <select class="form-select" name="Veggies" id="Veggies" required>
                             <option value="" disabled selected>Select</option>
                             <option value="0">0 (No)</option>
                             <option value="1">1 (Yes)</option>
@@ -254,14 +132,15 @@
 
                     <!-- Heavy Alcohol Consumption -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">Are you a heavy alcohol consumer?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="HvyAlcoholConsump">Are you a heavy
+                            alcohol consumer?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Men: >14 drinks/week. Women: >7 drinks/week. Select 1 for Yes,
-                                    0 for No.</div>
+                                <div class="tooltip-text">Men: &gt;14 drinks/week. Women: &gt;7 drinks/week. Select 1
+                                    for Yes, 0 for No.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="HvyAlcoholConsump">
+                        <select class="form-select" name="HvyAlcoholConsump" id="HvyAlcoholConsump" required>
                             <option value="" disabled selected>Select</option>
                             <option value="0">0 (No)</option>
                             <option value="1">1 (Yes)</option>
@@ -270,14 +149,15 @@
 
                     <!-- Difficulty Walking -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">Do you have difficulty walking?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="DiffWalk">Do you have difficulty
+                            walking?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Do you have serious difficulty walking or climbing stairs?
                                     Select 1 for Yes, 0 for No.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="DiffWalk">
+                        <select class="form-select" name="DiffWalk" id="DiffWalk" required>
                             <option value="" disabled selected>Select</option>
                             <option value="0">0 (No)</option>
                             <option value="1">1 (Yes)</option>
@@ -286,13 +166,13 @@
 
                     <!-- Sex -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">What is your sex?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="Sex">What is your sex?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Select 1 for Male, 0 for Female.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="Sex">
+                        <select class="form-select" name="Sex" id="Sex" required>
                             <option value="" disabled selected>Select</option>
                             <option value="0">0 (Female)</option>
                             <option value="1">1 (Male)</option>
@@ -301,13 +181,13 @@
 
                     <!-- Diabetes -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">What is your diabetes status?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="Diabetes">What is your diabetes status?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">0: No diabetes, 1: Pre-diabetes, 2: Diabetes.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="Diabetes">
+                        <select class="form-select" name="Diabetes" id="Diabetes" required>
                             <option value="" disabled selected>Select</option>
                             <option value="0">0 (No diabetes)</option>
                             <option value="1">1 (Pre-diabetes)</option>
@@ -315,15 +195,15 @@
                         </select>
                     </div>
 
-                    <!-- Age Group -->
+                    <!-- Age -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">What is your age group?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="Age">What is your age group?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Select your age category.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="Age">
+                        <select class="form-select" name="Age" id="Age" required>
                             <option value="" disabled selected>Select age group</option>
                             <option value="1">1 (18-24)</option>
                             <option value="2">2 (25-29)</option>
@@ -343,27 +223,29 @@
 
                     <!-- BMI -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">What is your Body Mass Index (BMI)?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="BMI">What is your Body Mass Index
+                            (BMI)?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Enter your Body Mass Index. Calculate as weight(kg) /
                                     (height(m))^2.</div>
                             </div>
                         </label>
-                        <input type="number" class="form-control" name="BMI" min="1" max="100" step="0.1"
-                            placeholder="e.g., 25.5">
+                        <input type="number" class="form-control" name="BMI" id="BMI" min="1" max="100" step="0.1"
+                            placeholder="e.g., 25.5" required>
                     </div>
 
                     <!-- General Health -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">How would you rate your general health?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="GenHlth">How would you rate your
+                            general health?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Scale 1-5. 1: Excellent, 2: Very Good, 3: Good, 4: Fair, 5:
                                     Poor.</div>
                             </div>
                         </label>
-                        <select class="form-select" name="GenHlth">
+                        <select class="form-select" name="GenHlth" id="GenHlth" required>
                             <option value="" disabled selected>Select health rating</option>
                             <option value="1">1 (Excellent)</option>
                             <option value="2">2 (Very Good)</option>
@@ -375,15 +257,17 @@
 
                     <!-- Mental Health -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">Days of poor mental health (last 30)?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="MentHlth">Days of poor mental health
+                            (last 30)?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">In the last 30 days, how many days was your mental health not
                                     good?</div>
                             </div>
                         </label>
-                        <select class="form-select" name="MentHlth">
+                        <select class="form-select" name="MentHlth" id="MentHlth" required>
                             <option value="" disabled selected>Select days</option>
+                            <!-- Generate options 0 to 30 -->
                             <script>
                                 for (let i = 0; i <= 30; i++) {
                                     document.write(`<option value="${i}">${i} days</option>`);
@@ -394,15 +278,17 @@
 
                     <!-- Physical Health -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center">Days of poor physical health (last 30)?
-                            <div class="tooltip-container">
+                        <label class="form-label d-flex align-items-center" for="PhysHlth">Days of poor physical health
+                            (last 30)?
+                            <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">In the last 30 days, how many days was your physical health
                                     not good?</div>
                             </div>
                         </label>
-                        <select class="form-select" name="PhysHlth">
+                        <select class="form-select" name="PhysHlth" id="PhysHlth" required>
                             <option value="" disabled selected>Select days</option>
+                            <!-- Generate options 0 to 30 -->
                             <script>
                                 for (let i = 0; i <= 30; i++) {
                                     document.write(`<option value="${i}">${i} days</option>`);
@@ -410,20 +296,25 @@
                             </script>
                         </select>
                     </div>
+
                 </div>
 
-                <!-- Model Selection and Submit Button -->
+                <!-- Model Selection -->
                 <div class="text-center mt-5">
                     <label for="model" class="form-label fs-5">Choose Prediction Model:</label>
-                    <select name="model" id="model" class="form-select mt-2 w-75 mx-auto">
+                    <select name="model" id="model" class="form-select mt-2 w-75 mx-auto" required>
                         <option value="Logistic Regression">Logistic Regression</option>
                         <option value="Gradient Boosting">Gradient Boosting</option>
                     </select>
-                    <button type="submit" class="btn btn-primary btn-lg mt-4">Get Prediction</button>
+
+                    <button type="submit" class="btn btn-primary btn-lg mt-4 px-5">Get Prediction</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

@@ -1,125 +1,120 @@
 /* General Body and Typography */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /* Prefer Segoe UI, then fallbacks */
     background: linear-gradient(135deg, #f0f2f5 0%, #e0e0e0 100%);
-    /* Light subtle gradient background for the whole page */
     margin: 0;
     color: #333;
-    /* Default text color */
     overflow-x: hidden;
-    /* Prevent horizontal scroll */
 }
 
-/* This new class should be added to the <body> tag of pages that need centered content, like the result page. */
 body.centered-page {
     display: flex;
-    /* For vertical/horizontal centering */
     justify-content: center;
-    /* For horizontal centering */
     align-items: center;
-    /* For vertical centering */
     min-height: 100vh;
-    /* Ensure body takes full viewport height for centering */
 }
-
 
 h1,
 h2,
 h3 {
     font-weight: 600;
     color: #007bff;
-    /* Primary blue color for headings */
     margin-bottom: 1.5rem;
-    /* Consistent spacing below headings */
 }
 
 /* Container Adjustments */
 .container {
     margin-top: 2rem;
-    /* General margin-top for containers */
     padding: 2rem;
     max-width: 960px;
-    /* Limit max-width for better readability on large screens */
     margin-left: auto;
-    /* Center container */
     margin-right: auto;
-    /* Center container */
 }
 
-/* Card Styling (for forms and results) */
+/* Card Styling (for forms, results, dashboard) */
 .card {
     border-radius: 1rem;
-    /* More pronounced rounded corners */
     background-color: #fff;
     padding: 2.5rem;
-    /* Slightly more padding */
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-    /* Softer, slightly larger shadow */
     margin: 2rem auto;
-    /* Center card and provide vertical spacing */
+    border: none;
+}
+
+body.index-page {
+    font-family: 'Inter', sans-serif;
+    background-color: #f7f9fc;
+    color: #4a5568;
+}
+
+body.index-page .card {
+    box-shadow: 0 8px 24px rgba(29, 53, 87, 0.1);
+}
+
+body.index-page .main-title {
+    color: #0077b6;
+    font-weight: 700;
 }
 
 /* Form Elements */
 label {
     font-weight: 600;
-    /* Bolder labels */
     margin-bottom: 0.5rem;
     display: block;
-    /* Ensure labels take full width */
+}
+
+.form-label {
+    font-weight: 500;
+    color: #2d3748;
 }
 
 input[type="text"],
 input[type="number"],
-select {
+select,
+.form-select,
+.form-control {
     border-radius: 0.5rem;
-    /* Slightly rounded corners for inputs */
     padding: 0.75rem 1rem;
-    /* More generous padding */
     border: 1px solid #ced4da;
-    /* Subtle border color */
     width: 100%;
     box-sizing: border-box;
-    /* Include padding in width calculation */
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 input[type="text"]:focus,
 input[type="number"]:focus,
-select:focus {
-    border-color: #80bdff;
+select:focus,
+.form-select:focus,
+.form-control:focus {
+    border-color: #0077b6;
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
-    /* Bootstrap-like focus glow */
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 182, 0.25);
 }
 
 /* Buttons */
 button,
 .btn {
     border-radius: 0.5rem;
-    /* Consistent with inputs */
     padding: 0.75rem 2rem;
-    /* More padding for buttons */
     font-weight: 600;
-    /* Bolder button text */
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 button:hover,
 .btn:hover {
     transform: translateY(-2px);
-    /* Subtle lift effect on hover */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #0077b6;
+    border-color: #0077b6;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background-color: #023e8a;
+    border-color: #023e8a;
+    transform: translateY(-2px);
 }
 
 .btn-secondary {
@@ -152,28 +147,79 @@ button:hover,
     color: white;
 }
 
+/* Tooltip container and text */
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
 
-/* Result Page Specific Styles (from "extraordinary" version) */
-/* The .result and .result-success/.result-danger classes will be overridden by these more specific ones for the result card */
+.help-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #ced4da;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    margin-left: 8px;
+    transition: background-color 0.3s;
+}
 
+.tooltip-container:hover .help-icon {
+    background-color: #0077b6;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 220px;
+    background-color: #2d3748;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -110px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.875rem;
+    line-height: 1.3;
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #2d3748 transparent transparent transparent;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Result Page Styles */
 .result-card {
     background-color: #ffffff;
     border-radius: 15px;
-    /* Larger border-radius for visual softness */
-    padding: 40px;
-    /* Ample padding */
+    padding: 30px 40px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    /* More pronounced shadow */
     max-width: 600px;
     width: 90%;
-    /* Responsive width */
     text-align: center;
     opacity: 0;
-    /* Hidden by default for fade-in animation */
     transform: translateY(20px);
-    /* Slightly moved down for slide-up effect */
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-    /* Smooth transition */
 }
 
 .result-card.show {
@@ -183,35 +229,23 @@ button:hover,
 
 .prediction-icon {
     font-size: 5rem;
-    /* Large icons for impact */
     margin-bottom: 20px;
     transition: color 0.5s ease-in-out;
-    /* Smooth color change */
 }
 
-/* Success state for prediction */
-.result-success .prediction-icon {
-    color: #28a745;
-    /* Green */
-}
-
+/* Success and danger colors */
+.result-success .prediction-icon,
 .result-success .prediction-main-text {
     color: #28a745;
 }
 
-/* Danger state for prediction */
-.result-danger .prediction-icon {
-    color: #dc3545;
-    /* Red */
-}
-
+.result-danger .prediction-icon,
 .result-danger .prediction-main-text {
     color: #dc3545;
 }
 
 .prediction-main-text {
     font-size: 2.8rem;
-    /* Very large text for impact */
     font-weight: 700;
     margin-bottom: 15px;
 }
@@ -219,31 +253,23 @@ button:hover,
 .confidence-score {
     font-size: 1.4rem;
     color: #6c757d;
-    /* Muted color */
     margin-bottom: 25px;
 }
 
 .interpretation-message {
     font-size: 1.1rem;
     color: #343a40;
-    /* Darker gray for readability */
     margin-bottom: 30px;
     line-height: 1.6;
-    /* Improve readability of long text */
 }
 
 .prediction-buttons {
     display: flex;
     flex-direction: column;
-    /* Stack buttons on small screens */
     gap: 15px;
-    /* Space between buttons */
     opacity: 0;
-    /* Hidden by default for fade-in animation */
     transform: translateY(20px);
-    /* Slightly moved down for slide-up effect */
     transition: opacity 1s ease-out 0.3s, transform 1s ease-out 0.3s;
-    /* Delay for buttons */
 }
 
 .prediction-buttons.show {
@@ -253,30 +279,25 @@ button:hover,
 
 .btn-dashboard {
     width: 100%;
-    /* Full width on small screens */
     padding: 12px 25px;
     font-size: 1.1rem;
     border-radius: 8px;
 }
 
-/* Adjust button layout for larger screens */
+/* Layout adjustments for larger screens */
 @media (min-width: 768px) {
     .prediction-buttons {
         flex-direction: row;
-        /* Side-by-side on larger screens */
         justify-content: center;
-        /* Center them */
     }
 
     .btn-dashboard {
         width: auto;
-        /* Auto width */
         min-width: 220px;
-        /* Minimum width for consistency */
     }
 }
 
-/* Dashboard Page Specific Styles */
+/* Dashboard Page Styles */
 .dashboard-container {
     padding-top: 20px;
     padding-bottom: 40px;
@@ -286,17 +307,12 @@ button:hover,
     position: relative;
     width: 100%;
     padding-bottom: 56.25%;
-    /* 16:9 Aspect Ratio */
     height: 0;
     overflow: hidden;
     margin-top: 20px;
-    /* Space above the iframe */
     background-color: #f8f9fa;
-    /* Light background while loading */
     border-radius: 8px;
-    /* Slightly rounded corners */
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    /* Subtle shadow */
 }
 
 .iframe-wrapper iframe {
@@ -306,7 +322,6 @@ button:hover,
     width: 100%;
     height: 100%;
     border: 0;
-    /* Remove default iframe border */
 }
 
 .loading-message {
@@ -315,18 +330,32 @@ button:hover,
     left: 50%;
     transform: translate(-50%, -50%);
     color: #6c757d;
-    /* Muted text color */
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     text-align: center;
 }
 
-/* General Alert Styling */
-.alert {
-    font-size: 1rem;
-    /* Slightly smaller for general alerts */
-    padding: 1rem 1.5rem;
-    border-radius: 10px;
-    margin-bottom: 1.5rem;
-}
+/* Responsive adjustments for small screens */
+@media (max-width: 480px) {
+    .result-card {
+        padding: 20px;
+    }
 
-/* Specific Bootstrap alert styles are already defined by Bootstrap itself, e.g., .alert-success, .alert-danger */
+    .prediction-icon {
+        font-size: 3.5rem;
+        margin-bottom: 15px;
+    }
+
+    .prediction-main-text {
+        font-size: 2rem;
+    }
+
+    .confidence-score,
+    .interpretation-message {
+        font-size: 1rem;
+    }
+
+    .btn-dashboard {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}

@@ -3,156 +3,30 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Prediction Result</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        /* Embed necessary styles directly for demonstration, but move these to style.css */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #f0f2f5 0%, #e0e0e0 100%);
-            /* Light subtle gradient */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            /* Hide scrollbar for the body to prevent bounce effect on height */
-        }
-
-        .result-card {
-            background-color: #ffffff;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            max-width: 600px;
-            width: 90%;
-            text-align: center;
-            opacity: 0;
-            /* Hidden by default for fade-in animation */
-            transform: translateY(20px);
-            /* Slightly moved down for slide-up effect */
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-
-        .result-card.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .prediction-icon {
-            font-size: 5rem;
-            /* Larger icon */
-            margin-bottom: 20px;
-        }
-
-        /* Success state for prediction */
-        .result-success .prediction-icon {
-            color: #28a745;
-            /* Green */
-        }
-
-        .result-success .prediction-main-text {
-            color: #28a745;
-        }
-
-        /* Danger state for prediction */
-        .result-danger .prediction-icon {
-            color: #dc3545;
-            /* Red */
-        }
-
-        .result-danger .prediction-main-text {
-            color: #dc3545;
-        }
-
-        .prediction-main-text {
-            font-size: 2.8rem;
-            /* Very large text for impact */
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .confidence-score {
-            font-size: 1.4rem;
-            color: #6c757d;
-            /* Muted color */
-            margin-bottom: 25px;
-        }
-
-        .interpretation-message {
-            font-size: 1.1rem;
-            color: #343a40;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .prediction-buttons {
-            display: flex;
-            flex-direction: column;
-            /* Stack buttons on small screens */
-            gap: 15px;
-            /* Space between buttons */
-            opacity: 0;
-            /* Hidden by default for fade-in animation */
-            transform: translateY(20px);
-            /* Slightly moved down for slide-up effect */
-            transition: opacity 1s ease-out 0.3s, transform 1s ease-out 0.3s;
-            /* Delay for buttons */
-        }
-
-        .prediction-buttons.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .btn-dashboard {
-            width: 100%;
-            /* Full width on small screens */
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            border-radius: 8px;
-        }
-
-        /* Adjust button layout for larger screens */
-        @media (min-width: 768px) {
-            .prediction-buttons {
-                flex-direction: row;
-                /* Side-by-side on larger screens */
-                justify-content: center;
-                /* Center them */
-            }
-
-            .btn-dashboard {
-                width: auto;
-                /* Auto width */
-                min-width: 220px;
-                /* Minimum width for consistency */
-            }
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 
-<body onload="animateResult()">
+<body class="centered-page" onload="animateResult()">
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
         <div
             class="result-card {% if 'No Heart Disease' in prediction_text %}result-success{% else %}result-danger{% endif %}">
             <div class="prediction-icon">
                 {% if 'No Heart Disease' in prediction_text %}
-                <i class="bi bi-heart-fill"></i> {% else %}
-                <i class="bi bi-bandaid-fill"></i> {% endif %}
+                <i class="bi bi-heart-fill"></i>
+                {% else %}
+                <i class="bi bi-bandaid-fill"></i>
+                {% endif %}
             </div>
 
-            <div class="prediction-main-text">
-                {{ prediction_text }}
-            </div>
+            <div class="prediction-main-text">{{ prediction_text }}</div>
 
             {% if confidence_score is defined and confidence_score is not none %}
             <div class="confidence-score">
-                Confidence: {{ "%.2f"|format(confidence_score * 100) }}%
+                Confidence: {{ '%.2f' | format(confidence_score * 100) }}%
             </div>
             {% endif %}
 
@@ -175,8 +49,6 @@
         function animateResult() {
             const resultCard = document.querySelector('.result-card');
             const predictionButtons = document.querySelector('.prediction-buttons');
-
-            // Add 'show' class to trigger CSS animations
             resultCard.classList.add('show');
             predictionButtons.classList.add('show');
         }
