@@ -5,16 +5,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Prediction Result</title>
+    <!-- Bootstrap CSS for styling and layout -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <!-- Bootstrap Icons for iconography -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Link to your custom stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 
 <body class="centered-page" onload="animateResult()">
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <!-- The card's color changes based on the prediction result (green for success, red for danger) -->
         <div
             class="result-card {% if 'No Heart Disease' in prediction_text %}result-success{% else %}result-danger{% endif %}">
             <div class="prediction-icon">
+                <!-- An appropriate icon is shown based on the prediction -->
                 {% if 'No Heart Disease' in prediction_text %}
                 <i class="bi bi-heart-fill"></i>
                 {% else %}
@@ -22,18 +27,23 @@
                 {% endif %}
             </div>
 
+            <!-- Display the main prediction text from the backend -->
             <div class="prediction-main-text">{{ prediction_text }}</div>
 
+            <!-- Only display the confidence score if it exists -->
             {% if confidence_score is defined and confidence_score is not none %}
             <div class="confidence-score">
-                Confidence: {{ '%.2f' | format(confidence_score * 100) }}%
+                <!-- The confidence_score is already formatted as a string (e.g., "95.20%") by the backend -->
+                Confidence: {{ confidence_score }}
             </div>
             {% endif %}
 
+            <!-- Display the detailed interpretation message from the backend -->
             <p class="interpretation-message">
                 {{ interpretation_message }}
             </p>
 
+            <!-- Action buttons to navigate to the dashboard or make another prediction -->
             <div class="prediction-buttons">
                 <a href="/dashboard" class="btn btn-primary btn-lg btn-dashboard">
                     View Dashboard Insights <i class="bi bi-graph-up"></i>
@@ -45,6 +55,7 @@
         </div>
     </div>
 
+    <!-- Simple JavaScript to trigger a fade-in animation on page load -->
     <script>
         function animateResult() {
             const resultCard = document.querySelector('.result-card');
