@@ -15,7 +15,8 @@ app = Flask(__name__)
 MODEL_URLS = {
     "logistic_regression_model.pkl": "https://drive.google.com/uc?id=1yZLf84PhhNhCa1Y6TfRf0io8RN9t__LE",
     "gradient_boosting_model.pkl": "https://drive.google.com/uc?id=1zGm5yaT_gykP2aqBw6KybB1l78MtvUsb",
-    "random_forest_model.pkl": "https://drive.google.com/uc?id=176I6UzHhq0gcx2iGlXeRpyFEE1e3p8BW",
+    "random_forest_model.pkl": "https://drive.google.com/uc?id=176I6UzHhq0gcx2iGlXeRpyFEE1e3p8BW"
+
 }
 
 # Set up a local path to store the models
