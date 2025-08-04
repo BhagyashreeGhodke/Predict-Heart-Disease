@@ -303,16 +303,16 @@
 
                 </div>
 
-                <!-- Model Selection -->
-                <div class="text-center mt-5">
-                    <label for="model" class="form-label fs-5">Choose Prediction Model:</label>
-                    <select name="model" id="model" class="form-select mt-2 w-75 mx-auto" required>
-                        <option value="Logistic Regression">Logistic Regression</option>
-                        <option value="Gradient Boosting">Gradient Boosting</option>
-                        <!-- Set Random Forest as the default selected option to match backend default -->
-                        <option value="Random Forest" selected>Random Forest</option>
-                    </select>
+                <!-- Hidden fields for other model features with default values -->
+                <input type="hidden" name="CholCheck" value="1.0">
+                <input type="hidden" name="AnyHealthcare" value="1.0">
+                <input type="hidden" name="NoDocbcCost" value="0.0">
+                <input type="hidden" name="Education" value="4.0">
+                <input type="hidden" name="Income" value="6.0">
 
+
+                <!-- Submit Button -->
+                <div class="text-center mt-5">
                     <button type="submit" class="btn btn-primary btn-lg mt-4 px-5">Get Prediction</button>
                 </div>
             </form>
