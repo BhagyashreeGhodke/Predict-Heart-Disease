@@ -5,64 +5,53 @@ import pandas as pd
 from flask import Flask, render_template, request
 import numpy as np
 import traceback
+import db
+from dotenv import load_dotenv
+
+# --- Initialization ---
+# Load environment variables from .env file
+load_dotenv()
+# Automatically check and create the database table if needed
+db.initialize_database()
 
 # Initialize the Flask application
 app = Flask(__name__)
 
 # --- Model Downloading and Loading ---
 
-# Define Google Drive URLs for all three pre-trained models
-MODEL_URLS = {
-    "logistic_regression_model.pkl": "https://drive.google.com/uc?id=1yZLf84PhhNhCa1Y6TfRf0io8RN9t__LE",
-    "gradient_boosting_model.pkl": "https://drive.google.com/uc?id=1zGm5yaT_gykP2aqBw6KybB1l78MtvUsb",
-    "random_forest_model.pkl": "https://drive.google.com/uc?id=176I6UzHhq0gcx2iGlXeRpyFEE1e3p8BW"
+# Define the Google Drive URL for the Logistic Regression model
+MODEL_URL = "https://drive.google.com/uc?id=1yZLf84PhhNhCa1Y6TfRf0io8RN9t__LE"
+MODEL_NAME = "logistic_regression_model.pkl"
 
-}
-
-# Set up a local path to store the models
+# Set up a local path to store the model
 MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
 os.makedirs(MODEL_PATH, exist_ok=True)
 
-# Download the models from Google Drive if they don't exist locally
-for model_name, url in MODEL_URLS.items():
-    file_path = os.path.join(MODEL_PATH, model_name)
-    if not os.path.exists(file_path):
-        print(f"Downloading {model_name}...")
-        try:
-            gdown.download(url, file_path, quiet=False)
-            print(f"Successfully saved {model_name} to {file_path}")
-        except Exception as e:
-            print(f"Error downloading {model_name}: {e}")
-    else:
-        print(f"{model_name} already exists locally.")
+# Download the model from Google Drive if it doesn't exist locally
+file_path = os.path.join(MODEL_PATH, MODEL_NAME)
+if not os.path.exists(file_path):
+    print(f"Downloading {MODEL_NAME}...")
+    try:
+        gdown.download(MODEL_URL, file_path, quiet=False)
+        print(f"Successfully saved {MODEL_NAME} to {file_path}")
+    except Exception as e:
+        print(f"Error downloading {MODEL_NAME}: {e}")
+else:
+    print(f"{MODEL_NAME} already exists locally.")
 
-# Load the downloaded models into memory
-lr_model, gb_model, rf_model = None, None, None
+# Load the downloaded model into memory
+lr_model = None
 try:
-    with open(os.path.join(MODEL_PATH, "logistic_regression_model.pkl"), "rb") as f:
+    with open(file_path, "rb") as f:
         lr_model = pickle.load(f)
     print("Logistic Regression model loaded successfully.")
 except Exception as e:
     print(f"Error loading Logistic Regression model: {e}")
 
-try:
-    with open(os.path.join(MODEL_PATH, "gradient_boosting_model.pkl"), "rb") as f:
-        gb_model = pickle.load(f)
-    print("Gradient Boosting model loaded successfully.")
-except Exception as e:
-    print(f"Error loading Gradient Boosting model: {e}")
-
-try:
-    with open(os.path.join(MODEL_PATH, "random_forest_model.pkl"), "rb") as f:
-        rf_model = pickle.load(f)
-    print("Random Forest model loaded successfully.")
-except Exception as e:
-    print(f"Error loading Random Forest model: {e}")
-
 
 # --- Data Configuration ---
 
-# This list defines the exact column order that the models were trained on.
+# This list defines the exact column order that the model was trained on.
 INPUT_COLS = [
     'HighBP', 'HighChol', 'CholCheck', 'BMI', 'Smoker', 'Stroke', 'Diabetes',
     'PhysActivity', 'Fruits', 'Veggies', 'HvyAlcoholConsump', 'AnyHealthcare',
@@ -89,9 +78,9 @@ def index():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    """Handles the form submission, processes the data, and returns the prediction."""
+    """Handles the form submission, processes data, saves it, and returns the prediction."""
     try:
-        # --- FINAL ROBUST DATA PREPARATION ---
+        # --- Robust Data Preparation ---
         user_input = request.form.to_dict()
         input_data = {}
 
@@ -112,47 +101,41 @@ def predict():
         print(input_df.to_string())
         print("----------------------------")
 
-        # --- Model Selection and Prediction ---
-        model_choice = user_input.get("model", "Random Forest") # Default to RF
-        model_to_use = rf_model
-
-        if model_choice == "Logistic Regression" and lr_model:
-            model_to_use = lr_model
-        elif model_choice == "Gradient Boosting" and gb_model:
-            model_to_use = gb_model
-        elif model_choice == "Random Forest" and rf_model:
-            model_to_use = rf_model
-        
-        if not model_to_use:
+        # --- Model Prediction ---
+        if not lr_model:
             return render_template("result.html",
                                    prediction_text="Prediction Error",
-                                   interpretation_message=f"The selected model ({model_choice}) is not available. It might have failed to load on startup.",
+                                   interpretation_message="The prediction model is not available. It might have failed to load on startup.",
                                    confidence_score=None)
 
-        prediction = model_to_use.predict(input_df)[0]
-        probabilities = model_to_use.predict_proba(input_df)[0]
-
+        prediction = lr_model.predict(input_df)[0]
+        probabilities = lr_model.predict_proba(input_df)[0]
+        
         # --- Prepare Results for Display ---
         if prediction == 1:
             prediction_text = "Heart Disease Detected"
             confidence_score = probabilities[1]
             interpretation_message = (
                 "Based on the provided data, there is an indication of potential heart disease. "
-                "It is crucial to consult a healthcare professional for a comprehensive diagnosis and personalized advice. "
-                
+                "It is crucial to consult a healthcare professional for a comprehensive diagnosis and personalized advice."
             )
         else:
             prediction_text = "No Heart Disease Indicated"
             confidence_score = probabilities[0]
             interpretation_message = (
                 "The prediction suggests a lower risk of heart disease based on your inputs. "
-                "However, regular check-ups and maintaining a healthy lifestyle are always recommended. "
-                
+                "However, regular check-ups and maintaining a healthy lifestyle are always recommended."
             )
+        
+        confidence_score_formatted = f"{confidence_score:.2%}"
+
+        # --- Save to Database ---
+        # This function is now called *after* the prediction variables are defined.
+        db.save_prediction_to_db(input_data, prediction_text, confidence_score_formatted)
 
         return render_template("result.html",
                                prediction_text=prediction_text,
-                               confidence_score=f"{confidence_score:.2%}",
+                               confidence_score=confidence_score_formatted,
                                interpretation_message=interpretation_message)
 
     except Exception as e:
