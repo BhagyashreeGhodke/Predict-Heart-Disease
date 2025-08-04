@@ -3,3 +3,5 @@ scikit-learn
 numpy
 gdown
 pandas
+mysql-connector-python
+dotenv
