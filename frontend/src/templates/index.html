@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Heart Disease Predictor</title>
     <!-- Bootstrap CSS for styling and layout -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
@@ -24,11 +24,11 @@
 
                     <!-- High Blood Pressure -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="HighBP">Do you have high blood
-                            pressure?
+                        <label class="form-label d-flex align-items-center" for="HighBP">High Blood Pressure?
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Select 1 for Yes, 0 for No.</div>
+                                <div class="tooltip-text">Adults who have been told they have high blood pressure by a
+                                    doctor, nurse, or other health professional. Select 1 for Yes, 0 for No.</div>
                             </div>
                         </label>
                         <select class="form-select" name="HighBP" id="HighBP" required>
@@ -40,10 +40,11 @@
 
                     <!-- High Cholesterol -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="HighChol">Do you have high cholesterol?
+                        <label class="form-label d-flex align-items-center" for="HighChol">High Cholesterol?
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Select 1 for Yes, 0 for No.</div>
+                                <div class="tooltip-text">Have you ever been told by a doctor, nurse or other health
+                                    professional that your blood cholesterol is high? Select 1 for Yes, 0 for No.</div>
                             </div>
                         </label>
                         <select class="form-select" name="HighChol" id="HighChol" required>
@@ -53,13 +54,42 @@
                         </select>
                     </div>
 
+                    <!-- Cholesterol Check -->
+                    <div class="col-md-4">
+                        <label class="form-label d-flex align-items-center" for="CholCheck">Cholesterol Check in 5 Yrs?
+                            <div class="tooltip-container" tabindex="0">
+                                <span class="help-icon">?</span>
+                                <div class="tooltip-text">Cholesterol check within past 5 years. Select 1 for Yes, 0 for
+                                    No.</div>
+                            </div>
+                        </label>
+                        <select class="form-select" name="CholCheck" id="CholCheck" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="0">0 (No)</option>
+                            <option value="1">1 (Yes)</option>
+                        </select>
+                    </div>
+
+                    <!-- BMI -->
+                    <div class="col-md-4">
+                        <label class="form-label d-flex align-items-center" for="BMI">Body Mass Index (BMI)
+                            <div class="tooltip-container" tabindex="0">
+                                <span class="help-icon">?</span>
+                                <div class="tooltip-text">Enter your Body Mass Index. Calculate as weight(kg) /
+                                    (height(m))^2.</div>
+                            </div>
+                        </label>
+                        <input type="number" class="form-control" name="BMI" id="BMI" min="1" max="100" step="0.1"
+                            placeholder="e.g., 25.5" required>
+                    </div>
+
                     <!-- Smoker -->
                     <div class="col-md-4">
                         <label class="form-label d-flex align-items-center" for="Smoker">Are you a smoker?
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Have you smoked at least 100 cigarettes in your life? Select 1
-                                    for Yes, 0 for No.</div>
+                                <div class="tooltip-text">Have you smoked at least 100 cigarettes in your entire life?
+                                    Select 1 for Yes, 0 for No.</div>
                             </div>
                         </label>
                         <select class="form-select" name="Smoker" id="Smoker" required>
@@ -71,10 +101,11 @@
 
                     <!-- Stroke -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="Stroke">Have you ever had a stroke?
+                        <label class="form-label d-flex align-items-center" for="Stroke">Ever had a stroke?
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Select 1 for Yes, 0 for No.</div>
+                                <div class="tooltip-text">(Ever told) you had a stroke. Select 1 for Yes, 0 for No.
+                                </div>
                             </div>
                         </label>
                         <select class="form-select" name="Stroke" id="Stroke" required>
@@ -84,14 +115,29 @@
                         </select>
                     </div>
 
-                    <!-- Physical Activity -->
+                    <!-- Diabetes -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="PhysActivity">Do you engage in physical
-                            activity?
+                        <label class="form-label d-flex align-items-center" for="Diabetes">Diabetes Status
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Engaged in physical activity in the past 30 days (not
-                                    including job)? Select 1 for Yes, 0 for No.</div>
+                                <div class="tooltip-text">0: No diabetes, 1: Pre-diabetes, 2: Diabetes.</div>
+                            </div>
+                        </label>
+                        <select class="form-select" name="Diabetes" id="Diabetes" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="0">0 (No diabetes)</option>
+                            <option value="1">1 (Pre-diabetes)</option>
+                            <option value="2">2 (Diabetes)</option>
+                        </select>
+                    </div>
+
+                    <!-- Physical Activity -->
+                    <div class="col-md-4">
+                        <label class="form-label d-flex align-items-center" for="PhysActivity">Physical Activity?
+                            <div class="tooltip-container" tabindex="0">
+                                <span class="help-icon">?</span>
+                                <div class="tooltip-text">Physical activity in past 30 days other than regular job.
+                                    Select 1 for Yes, 0 for No.</div>
                             </div>
                         </label>
                         <select class="form-select" name="PhysActivity" id="PhysActivity" required>
@@ -103,11 +149,11 @@
 
                     <!-- Fruits -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="Fruits">Do you consume fruits daily?
+                        <label class="form-label d-flex align-items-center" for="Fruits">Consume Fruits Daily?
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Do you consume fruit 1 or more times per day? Select 1 for
-                                    Yes, 0 for No.</div>
+                                <div class="tooltip-text">Consume fruit 1 or more times per day. Select 1 for Yes, 0 for
+                                    No.</div>
                             </div>
                         </label>
                         <select class="form-select" name="Fruits" id="Fruits" required>
@@ -119,12 +165,11 @@
 
                     <!-- Veggies -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="Veggies">Do you consume vegetables
-                            daily?
+                        <label class="form-label d-flex align-items-center" for="Veggies">Consume Veggies Daily?
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Do you consume vegetables 1 or more times per day? Select 1
-                                    for Yes, 0 for No.</div>
+                                <div class="tooltip-text">Consume vegetables 1 or more times per day. Select 1 for Yes,
+                                    0 for No.</div>
                             </div>
                         </label>
                         <select class="form-select" name="Veggies" id="Veggies" required>
@@ -136,12 +181,13 @@
 
                     <!-- Heavy Alcohol Consumption -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="HvyAlcoholConsump">Are you a heavy
-                            alcohol consumer?
+                        <label class="form-label d-flex align-items-center" for="HvyAlcoholConsump">Heavy Alcohol
+                            Consumer?
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Men: &gt;14 drinks/week. Women: &gt;7 drinks/week. Select 1
-                                    for Yes, 0 for No.</div>
+                                <div class="tooltip-text">Heavy drinkers (adult men having more than 14 drinks per week
+                                    and adult women having more than 7 drinks per week). Select 1 for Yes, 0 for No.
+                                </div>
                             </div>
                         </label>
                         <select class="form-select" name="HvyAlcoholConsump" id="HvyAlcoholConsump" required>
@@ -151,10 +197,103 @@
                         </select>
                     </div>
 
+                    <!-- Any Healthcare -->
+                    <div class="col-md-4">
+                        <label class="form-label d-flex align-items-center" for="AnyHealthcare">Have Healthcare
+                            Coverage?
+                            <div class="tooltip-container" tabindex="0">
+                                <span class="help-icon">?</span>
+                                <div class="tooltip-text">Have any kind of health care coverage, including health
+                                    insurance, prepaid plans such as HMOs, or government plans such as Medicare or
+                                    Indian Health Service. Select 1 for Yes, 0 for No.</div>
+                            </div>
+                        </label>
+                        <select class="form-select" name="AnyHealthcare" id="AnyHealthcare" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="0">0 (No)</option>
+                            <option value="1">1 (Yes)</option>
+                        </select>
+                    </div>
+
+                    <!-- No Doctor because of Cost -->
+                    <div class="col-md-4">
+                        <label class="form-label d-flex align-items-center" for="NoDocbcCost">Skipped Doctor Due to
+                            Cost?
+                            <div class="tooltip-container" tabindex="0">
+                                <span class="help-icon">?</span>
+                                <div class="tooltip-text">Was there a time in the past 12 months when you needed to see
+                                    a doctor but could not because of cost? Select 1 for Yes, 0 for No.</div>
+                            </div>
+                        </label>
+                        <select class="form-select" name="NoDocbcCost" id="NoDocbcCost" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="0">0 (No)</option>
+                            <option value="1">1 (Yes)</option>
+                        </select>
+                    </div>
+
+                    <!-- General Health -->
+                    <div class="col-md-4">
+                        <label class="form-label d-flex align-items-center" for="GenHlth">General Health Rating
+                            <div class="tooltip-container" tabindex="0">
+                                <span class="help-icon">?</span>
+                                <div class="tooltip-text">Would you say that in general your health is: Scale 1-5. 1:
+                                    Excellent, 2: Very Good, 3: Good, 4: Fair, 5: Poor.</div>
+                            </div>
+                        </label>
+                        <select class="form-select" name="GenHlth" id="GenHlth" required>
+                            <option value="" disabled selected>Select health rating</option>
+                            <option value="1">1 (Excellent)</option>
+                            <option value="2">2 (Very Good)</option>
+                            <option value="3">3 (Good)</option>
+                            <option value="4">4 (Fair)</option>
+                            <option value="5">5 (Poor)</option>
+                        </select>
+                    </div>
+
+                    <!-- Mental Health -->
+                    <div class="col-md-4">
+                        <label class="form-label d-flex align-items-center" for="MentHlth">Days of Poor Mental Health
+                            <div class="tooltip-container" tabindex="0">
+                                <span class="help-icon">?</span>
+                                <div class="tooltip-text">Now thinking about your mental health, which includes stress,
+                                    depression, and problems with emotions, for how many days during the past 30 days
+                                    was your mental health not good? (0-30 days).</div>
+                            </div>
+                        </label>
+                        <select class="form-select" name="MentHlth" id="MentHlth" required>
+                            <option value="" disabled selected>Select days</option>
+                            <script>
+                                for (let i = 0; i <= 30; i++) {
+                                    document.write(`<option value="${i}">${i} days</option>`);
+                                }
+                            </script>
+                        </select>
+                    </div>
+
+                    <!-- Physical Health -->
+                    <div class="col-md-4">
+                        <label class="form-label d-flex align-items-center" for="PhysHlth">Days of Poor Physical Health
+                            <div class="tooltip-container" tabindex="0">
+                                <span class="help-icon">?</span>
+                                <div class="tooltip-text">Now thinking about your physical health, which includes
+                                    physical illness and injury, for how many days during the past 30 days was your
+                                    physical health not good? (0-30 days).</div>
+                            </div>
+                        </label>
+                        <select class="form-select" name="PhysHlth" id="PhysHlth" required>
+                            <option value="" disabled selected>Select days</option>
+                            <script>
+                                for (let i = 0; i <= 30; i++) {
+                                    document.write(`<option value="${i}">${i} days</option>`);
+                                }
+                            </script>
+                        </select>
+                    </div>
+
                     <!-- Difficulty Walking -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="DiffWalk">Do you have difficulty
-                            walking?
+                        <label class="form-label d-flex align-items-center" for="DiffWalk">Difficulty Walking?
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
                                 <div class="tooltip-text">Do you have serious difficulty walking or climbing stairs?
@@ -170,10 +309,11 @@
 
                     <!-- Sex -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="Sex">What is your sex?
+                        <label class="form-label d-flex align-items-center" for="Sex">Sex
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Select 1 for Male, 0 for Female.</div>
+                                <div class="tooltip-text">Indicate sex of respondent. Select 1 for Male, 0 for Female.
+                                </div>
                             </div>
                         </label>
                         <select class="form-select" name="Sex" id="Sex" required>
@@ -183,28 +323,12 @@
                         </select>
                     </div>
 
-                    <!-- Diabetes -->
-                    <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="Diabetes">What is your diabetes status?
-                            <div class="tooltip-container" tabindex="0">
-                                <span class="help-icon">?</span>
-                                <div class="tooltip-text">0: No diabetes, 1: Pre-diabetes, 2: Diabetes.</div>
-                            </div>
-                        </label>
-                        <select class="form-select" name="Diabetes" id="Diabetes" required>
-                            <option value="" disabled selected>Select</option>
-                            <option value="0">0 (No diabetes)</option>
-                            <option value="1">1 (Pre-diabetes)</option>
-                            <option value="2">2 (Diabetes)</option>
-                        </select>
-                    </div>
-
                     <!-- Age -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="Age">What is your age group?
+                        <label class="form-label d-flex align-items-center" for="Age">Age Group
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Select your age category.</div>
+                                <div class="tooltip-text">Fourteen-level age category. Select your age group.</div>
                             </div>
                         </label>
                         <select class="form-select" name="Age" id="Age" required>
@@ -225,91 +349,48 @@
                         </select>
                     </div>
 
-                    <!-- BMI -->
+                    <!-- Education -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="BMI">What is your Body Mass Index
-                            (BMI)?
+                        <label class="form-label d-flex align-items-center" for="Education">Education Level
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">Enter your Body Mass Index. Calculate as weight(kg) /
-                                    (height(m))^2.</div>
+                                <div class="tooltip-text">What is the highest grade or year of school you completed?
+                                </div>
                             </div>
                         </label>
-                        <input type="number" class="form-control" name="BMI" id="BMI" min="1" max="100" step="0.1"
-                            placeholder="e.g., 25.5" required>
-                    </div>
-
-                    <!-- General Health -->
-                    <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="GenHlth">How would you rate your
-                            general health?
-                            <div class="tooltip-container" tabindex="0">
-                                <span class="help-icon">?</span>
-                                <div class="tooltip-text">Scale 1-5. 1: Excellent, 2: Very Good, 3: Good, 4: Fair, 5:
-                                    Poor.</div>
-                            </div>
-                        </label>
-                        <select class="form-select" name="GenHlth" id="GenHlth" required>
-                            <option value="" disabled selected>Select health rating</option>
-                            <option value="1">1 (Excellent)</option>
-                            <option value="2">2 (Very Good)</option>
-                            <option value="3">3 (Good)</option>
-                            <option value="4">4 (Fair)</option>
-                            <option value="5">5 (Poor)</option>
+                        <select class="form-select" name="Education" id="Education" required>
+                            <option value="" disabled selected>Select education level</option>
+                            <option value="1">1 (Never attended / Kindergarten only)</option>
+                            <option value="2">2 (Grades 1-8)</option>
+                            <option value="3">3 (Grades 9-11)</option>
+                            <option value="4">4 (Grade 12 or GED)</option>
+                            <option value="5">5 (College 1-3 years)</option>
+                            <option value="6">6 (College 4 years or more)</option>
                         </select>
                     </div>
 
-                    <!-- Mental Health -->
+                    <!-- Income -->
                     <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="MentHlth">Days of poor mental health
-                            (last 30)?
+                        <label class="form-label d-flex align-items-center" for="Income">Income Level
                             <div class="tooltip-container" tabindex="0">
                                 <span class="help-icon">?</span>
-                                <div class="tooltip-text">In the last 30 days, how many days was your mental health not
-                                    good?</div>
+                                <div class="tooltip-text">Is your annual household income from all sources...</div>
                             </div>
                         </label>
-                        <select class="form-select" name="MentHlth" id="MentHlth" required>
-                            <option value="" disabled selected>Select days</option>
-                            <!-- Generate options 0 to 30 -->
-                            <script>
-                                for (let i = 0; i <= 30; i++) {
-                                    document.write(`<option value="${i}">${i} days</option>`);
-                                }
-                            </script>
-                        </select>
-                    </div>
-
-                    <!-- Physical Health -->
-                    <div class="col-md-4">
-                        <label class="form-label d-flex align-items-center" for="PhysHlth">Days of poor physical health
-                            (last 30)?
-                            <div class="tooltip-container" tabindex="0">
-                                <span class="help-icon">?</span>
-                                <div class="tooltip-text">In the last 30 days, how many days was your physical health
-                                    not good?</div>
-                            </div>
-                        </label>
-                        <select class="form-select" name="PhysHlth" id="PhysHlth" required>
-                            <option value="" disabled selected>Select days</option>
-                            <!-- Generate options 0 to 30 -->
-                            <script>
-                                for (let i = 0; i <= 30; i++) {
-                                    document.write(`<option value="${i}">${i} days</option>`);
-                                }
-                            </script>
+                        <select class="form-select" name="Income" id="Income" required>
+                            <option value="" disabled selected>Select income level</option>
+                            <option value="1">1 (Less than $10,000)</option>
+                            <option value="2">2 ($10,000 to $14,999)</option>
+                            <option value="3">3 ($15,000 to $19,999)</option>
+                            <option value="4">4 ($20,000 to $24,999)</option>
+                            <option value="5">5 ($25,000 to $34,999)</option>
+                            <option value="6">6 ($35,000 to $49,999)</option>
+                            <option value="7">7 ($50,000 to $74,999)</option>
+                            <option value="8">8 ($75,000 or more)</option>
                         </select>
                     </div>
 
                 </div>
-
-                <!-- Hidden fields for other model features with default values -->
-                <input type="hidden" name="CholCheck" value="1.0">
-                <input type="hidden" name="AnyHealthcare" value="1.0">
-                <input type="hidden" name="NoDocbcCost" value="0.0">
-                <input type="hidden" name="Education" value="4.0">
-                <input type="hidden" name="Income" value="6.0">
-
 
                 <!-- Submit Button -->
                 <div class="text-center mt-5">
