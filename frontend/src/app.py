@@ -5,10 +5,29 @@ import pandas as pd
 from flask import Flask, render_template, request
 import numpy as np
 import traceback
+import db
+from dotenv import load_dotenv
 
 # --- Initialization ---
+# Load environment variables from .env file
+load_dotenv()
+
 # Initialize the Flask application
 app = Flask(__name__)
+
+# --- Database Initialization (Conditional) ---
+# Only initialize the database if the DATABASE_URL is set
+if os.environ.get('DATABASE_URL'):
+    print("DATABASE_URL found. Initializing database...")
+    try:
+        db.initialize_database()
+    except Exception as db_init_error:
+        print(f"--- WARNING: Database initialization failed ---")
+        print(f"Error: {db_init_error}")
+        print("---------------------------------------------")
+else:
+    print("DATABASE_URL not found. Skipping database initialization.")
+
 
 # --- Model Downloading and Loading ---
 
@@ -90,9 +109,16 @@ def predict():
 
         input_df = pd.DataFrame([input_data])[INPUT_COLS]
         
+        print("--- Input Data for Model ---")
+        print(input_df.to_string())
+        print("----------------------------")
+
         # --- Model Prediction ---
         if not model:
-            raise Exception("The prediction model is not available.")
+            return render_template("result.html",
+                                   prediction_text="Prediction Error",
+                                   interpretation_message="The prediction model is not available. It might have failed to load on startup.",
+                                   confidence_score=None)
 
         prediction = model.predict(input_df)[0]
         probabilities = model.predict_proba(input_df)[0]
@@ -114,6 +140,21 @@ def predict():
             )
         
         confidence_score_formatted = f"{confidence_score:.2%}"
+        
+        # --- Save to Database (if possible) ---
+        # This block will only run if the DATABASE_URL is available in the environment.
+        try:
+            if os.environ.get('DATABASE_URL'):
+                db.save_prediction_to_db(input_data, prediction_text, confidence_score_formatted)
+                print("Prediction saved to database.")
+            else:
+                print("DATABASE_URL not found. Skipping database save.")
+        except Exception as db_error:
+            # If saving fails for any reason, just print a warning but don't crash the app.
+            print(f"--- WARNING: Could not save to database ---")
+            print(f"Error: {db_error}")
+            print("-------------------------------------------")
+
 
         return render_template("result.html",
                                prediction_text=prediction_text,
@@ -121,13 +162,19 @@ def predict():
                                interpretation_message=interpretation_message)
 
     except Exception as e:
-        # --- Standard Error Handling ---
+        # --- FIXED FOR DEBUGGING ---
+        # This fixes the "f-string expression part cannot include a backslash" error.
         print("--- AN UNEXPECTED ERROR OCCURRED ---")
-        print(traceback.format_exc())
+        error_traceback = traceback.format_exc()
+        print(error_traceback)
         print("------------------------------------")
+        
+        # Perform the replacement before the f-string
+        formatted_traceback = error_traceback.replace('\n', '<br>')
+        
         return render_template("result.html",
                                prediction_text="Prediction Error",
-                               interpretation_message="An unexpected server error occurred. Please try again later.",
+                               interpretation_message=f"An unexpected error occurred: {str(e)}<br><br>Traceback:<br>{formatted_traceback}",
                                confidence_score=None)
 
 @app.route("/dashboard")
