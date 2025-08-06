@@ -162,16 +162,14 @@ def predict():
                                interpretation_message=interpretation_message)
 
     except Exception as e:
-        # --- FIXED FOR DEBUGGING ---
-        # This fixes the "f-string expression part cannot include a backslash" error.
+        # --- ENHANCED FOR DEBUGGING ---
+        # This will now display the actual error on the results page.
         print("--- AN UNEXPECTED ERROR OCCURRED ---")
         error_traceback = traceback.format_exc()
         print(error_traceback)
         print("------------------------------------")
-        
-        # Perform the replacement before the f-string
+        # Perform the replacement before the f-string to avoid syntax errors
         formatted_traceback = error_traceback.replace('\n', '<br>')
-        
         return render_template("result.html",
                                prediction_text="Prediction Error",
                                interpretation_message=f"An unexpected error occurred: {str(e)}<br><br>Traceback:<br>{formatted_traceback}",
