@@ -125,17 +125,17 @@ def predict():
         
         # --- Prepare Results for Display ---
         if prediction == 1:
-            prediction_text = "Heart Disease Detected"
+            prediction_text = "Cardiovascular disease Detected"
             confidence_score = probabilities[1]
             interpretation_message = (
-                "Based on the provided data, there is an indication of potential heart disease. "
+                "Based on the provided data, there is an indication of potential cardiovascular disease. "
                 "It is crucial to consult a healthcare professional for a comprehensive diagnosis and personalized advice."
             )
         else:
-            prediction_text = "No Heart Disease Indicated"
+            prediction_text = "No Cardiovascular disease Indicated"
             confidence_score = probabilities[0]
             interpretation_message = (
-                "The prediction suggests a lower risk of heart disease based on your inputs. "
+                "The prediction suggests a lower risk of cardiovascular disease based on your inputs. "
                 "However, regular check-ups and maintaining a healthy lifestyle are always recommended."
             )
         

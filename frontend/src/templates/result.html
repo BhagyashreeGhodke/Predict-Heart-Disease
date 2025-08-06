@@ -15,12 +15,12 @@
 
 <body class="centered-page" onload="animateResult()">
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-        <!-- The card's color changes based on the prediction result (green for success, red for danger) -->
+        <!-- The card's color now correctly changes based on the prediction result -->
         <div
-            class="result-card {% if 'No Heart Disease' in prediction_text %}result-success{% else %}result-danger{% endif %}">
+            class="result-card {% if 'No Cardiovascular' in prediction_text %}result-success{% else %}result-danger{% endif %}">
             <div class="prediction-icon">
                 <!-- An appropriate icon is shown based on the prediction -->
-                {% if 'No Heart Disease' in prediction_text %}
+                {% if 'No Cardiovascular' in prediction_text %}
                 <i class="bi bi-heart-fill"></i>
                 {% else %}
                 <i class="bi bi-bandaid-fill"></i>
