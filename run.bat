@@ -1,0 +1,3 @@
+@echo off
+echo Starting the application...
+python frontend/src/app.py
