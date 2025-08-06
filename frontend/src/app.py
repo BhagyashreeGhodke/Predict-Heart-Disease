@@ -12,16 +12,16 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 # Automatically check and create the database table if needed
-#db.initialize_database()
+db.initialize_database()
 
 # Initialize the Flask application
 app = Flask(__name__)
 
 # --- Model Downloading and Loading ---
 
-# Define the Google Drive URL for the Logistic Regression model
-MODEL_URL = "https://drive.google.com/uc?id=1yZLf84PhhNhCa1Y6TfRf0io8RN9t__LE"
-MODEL_NAME = "logistic_regression_model.pkl"
+# Define the Google Drive URL for the Random Forest model
+MODEL_URL = "https://drive.google.com/uc?id=1VIjQV2f04CRQrQv-xgef7M81SinBiXTD"
+MODEL_NAME = "random_forest_model.pkl"
 
 # Set up a local path to store the model
 MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
@@ -40,13 +40,13 @@ else:
     print(f"{MODEL_NAME} already exists locally.")
 
 # Load the downloaded model into memory
-lr_model = None
+model = None
 try:
     with open(file_path, "rb") as f:
-        lr_model = pickle.load(f)
-    print("Logistic Regression model loaded successfully.")
+        model = pickle.load(f)
+    print("Random Forest model loaded successfully.")
 except Exception as e:
-    print(f"Error loading Logistic Regression model: {e}")
+    print(f"Error loading the model: {e}")
 
 
 # --- Data Configuration ---
@@ -102,14 +102,14 @@ def predict():
         print("----------------------------")
 
         # --- Model Prediction ---
-        if not lr_model:
+        if not model:
             return render_template("result.html",
                                    prediction_text="Prediction Error",
                                    interpretation_message="The prediction model is not available. It might have failed to load on startup.",
                                    confidence_score=None)
 
-        prediction = lr_model.predict(input_df)[0]
-        probabilities = lr_model.predict_proba(input_df)[0]
+        prediction = model.predict(input_df)[0]
+        probabilities = model.predict_proba(input_df)[0]
         
         # --- Prepare Results for Display ---
         if prediction == 1:
