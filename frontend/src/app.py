@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 # Automatically check and create the database table if needed
-db.initialize_database()
+#db.initialize_database()
 
 # Initialize the Flask application
 app = Flask(__name__)
