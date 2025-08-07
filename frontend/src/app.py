@@ -7,17 +7,22 @@ import numpy as np
 import traceback
 import db
 from dotenv import load_dotenv
+from pathlib import Path 
 
-# --- Initialization ---
-# Load environment variables from .env file
-load_dotenv()
+
+# --- Initialization---
+# This code navigates up three levels from app.py (src -> frontend -> root) to find the .env file.
+dotenv_path = Path(__file__).parent.parent.parent / '.env'
+load_dotenv(dotenv_path=dotenv_path)
+print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")
 
 # Initialize the Flask application
 app = Flask(__name__)
-
+DATABASE_URL = os.getenv('DATABASE_URL')
+print("DATABASE_URL: ",DATABASE_URL)
 # --- Database Initialization (Conditional) ---
 # Only initialize the database if the DATABASE_URL is set
-if os.environ.get('DATABASE_URL'):
+if DATABASE_URL:
     print("DATABASE_URL found. Initializing database...")
     try:
         db.initialize_database()
