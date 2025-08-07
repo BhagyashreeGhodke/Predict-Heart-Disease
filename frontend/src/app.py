@@ -40,7 +40,7 @@ else:
 #MODEL_URL = "https://drive.google.com/uc?id=1VIjQV2f04CRQrQv-xgef7M81SinBiXTD"
 MODEL_URL = "https://drive.google.com/uc?id=1o1hUrbsHEaaC9yVdf1YK4Abq4qOfYs-N"
 
-MODEL_NAME = "XGBoost_model.pkl"
+MODEL_NAME = "Random_forest.pkl"
 
 # Set up a local path to store the model
 
