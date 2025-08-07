@@ -38,6 +38,7 @@ MODEL_URL = "https://drive.google.com/uc?id=1o1hUrbsHEaaC9yVdf1YK4Abq4qOfYs-N"
 MODEL_NAME = "XGBoost_model.pkl"
 
 # Set up a local path to store the model
+
 MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
 os.makedirs(MODEL_PATH, exist_ok=True)
 
