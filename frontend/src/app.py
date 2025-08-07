@@ -32,8 +32,10 @@ else:
 # --- Model Downloading and Loading ---
 
 # Define the Google Drive URL for the Random Forest model
-MODEL_URL = "https://drive.google.com/uc?id=1VIjQV2f04CRQrQv-xgef7M81SinBiXTD"
-MODEL_NAME = "random_forest_model.pkl"
+#MODEL_URL = "https://drive.google.com/uc?id=1VIjQV2f04CRQrQv-xgef7M81SinBiXTD"
+MODEL_URL = "https://drive.google.com/uc?id=1o1hUrbsHEaaC9yVdf1YK4Abq4qOfYs-N"
+
+MODEL_NAME = "XGBoost_model.pkl"
 
 # Set up a local path to store the model
 MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
@@ -56,7 +58,7 @@ model = None
 try:
     with open(file_path, "rb") as f:
         model = pickle.load(f)
-    print("Random Forest model loaded successfully.")
+    print(f"{MODEL_NAME} loaded successfully.")
 except Exception as e:
     print(f"Error loading the model: {e}")
 
