@@ -1,7 +1,6 @@
 # Predict-Heart-Disease
 
-Live: https://predict-heart-disease2.onrender.com
-
+Live: https://predict-heart-disease-4ha7.onrender.com
 
 Title:
 HeartSmart AI: Predicting Cardiovascular Risk with ML
