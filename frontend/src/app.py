@@ -38,8 +38,7 @@ else:
 
 # Define the Google Drive URL for the Random Forest model
 #MODEL_URL = "https://drive.google.com/uc?id=1VIjQV2f04CRQrQv-xgef7M81SinBiXTD"
-MODEL_URL = "https://drive.google.com/uc?id=1o1hUrbsHEaaC9yVdf1YK4Abq4qOfYs-N"
-
+MODEL_URL = "https://drive.google.com/uc?id=1ykAtYjp0DmOg7MB0-rdPBdyK6lz7Iy_c"
 MODEL_NAME = "Random_forest.pkl"
 
 # Set up a local path to store the model
